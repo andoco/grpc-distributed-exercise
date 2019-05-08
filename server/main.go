@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"math/rand"
 	"net"
 	"time"
 
@@ -15,7 +16,8 @@ import (
 type service struct{}
 
 func (s *service) Begin(req *numbers.BeginRequest, stream numbers.Generator_BeginServer) error {
-	var a int32 = 1
+	a := 1 + rand.Int31n(0xFF-1)
+
 	for {
 		time.Sleep(1 * time.Second)
 		if err := stream.Send(&numbers.Number{Value: a}); err != nil {
