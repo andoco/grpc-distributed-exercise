@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package numbers;
+
+service Generator {
+  rpc Begin(BeginRequest) returns (stream Number) {}
+}
+
+message Number { int32 value = 1; }
+
+message BeginRequest {}
