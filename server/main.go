@@ -15,8 +15,8 @@ import (
 
 type service struct{}
 
-func (s *service) Begin(req *numbers.BeginRequest, stream numbers.Generator_BeginServer) error {
-	a := 1 + rand.Int31n(0xFF-1)
+func (service) generate(seed int32, stream numbers.Generator_BeginServer) error {
+	a := seed
 
 	for {
 		time.Sleep(1 * time.Second)
@@ -25,6 +25,15 @@ func (s *service) Begin(req *numbers.BeginRequest, stream numbers.Generator_Begi
 		}
 		a *= 2
 	}
+}
+
+func (s *service) Begin(req *numbers.BeginRequest, stream numbers.Generator_BeginServer) error {
+	a := 1 + rand.Int31n(0xFF-1)
+	return s.generate(a, stream)
+}
+
+func (s *service) Resume(req *numbers.ResumeRequest, stream numbers.Generator_ResumeServer) error {
+	return s.generate(req.Seed*2, stream)
 }
 
 func serve(port int) error {
