@@ -1,3 +1,6 @@
+var parseArgs = require('minimist')
+var args = parseArgs(process.argv.slice(2), { default: { port: 8888 } });
+
 var PROTO_PATH = __dirname + '/../protos/numbers.proto';
 var grpc = require('grpc');
 var protoLoader = require('@grpc/proto-loader');
@@ -13,7 +16,7 @@ var packageDefinition = protoLoader.loadSync(
   });
 var numbers = grpc.loadPackageDefinition(packageDefinition).numbers;
 
-var stub = new numbers.Generator('localhost:8888', grpc.credentials.createInsecure())
+var stub = new numbers.Generator(`localhost:${args['port']}`, grpc.credentials.createInsecure())
 
 var call = stub.begin();
 
