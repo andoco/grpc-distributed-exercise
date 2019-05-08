@@ -4,8 +4,11 @@ package numbers;
 
 service Generator {
   rpc Begin(BeginRequest) returns (stream Number) {}
+  rpc Resume(ResumeRequest) returns (stream Number) {}
 }
 
 message Number { int32 value = 1; }
 
 message BeginRequest {}
+
+message ResumeRequest { int32 seed = 1;}
