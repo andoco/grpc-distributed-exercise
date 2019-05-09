@@ -25,7 +25,7 @@ function setupGrpc(args) {
 var connectBackoff
 
 function setupConnectBackoff() {
-  connectBackoff = backoff.exponential({ randomisationFactor: 0.1 })
+  connectBackoff = backoff.exponential({ initialDelay: 1000, maxDelay: 10000, randomisationFactor: 0.1 })
   connectBackoff.failAfter(10)
 
   connectBackoff.on('backoff', (number, delay) => {
@@ -41,7 +41,6 @@ function setupConnectBackoff() {
 }
 
 function connect() {
-  var call = stub.Begin({ clientId: clientId, maxNumbers: maxNumbers })
   var call = totalReceived == 0
     ? stub.Begin({ clientId: clientId, maxNumbers: maxNumbers })
     : stub.Resume({ clientId: clientId })
