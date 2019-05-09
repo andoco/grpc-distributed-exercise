@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"os"
 	"sync"
+	"time"
 
 	"github.com/pkg/errors"
 )
@@ -22,6 +23,7 @@ type State struct {
 	MaxNumbers   int
 	Seed         int64
 	NumGenerated int
+	LastActive   time.Time
 }
 
 func NewAStore() *AStore {

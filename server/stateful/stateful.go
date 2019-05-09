@@ -27,7 +27,13 @@ func (s *service) generate(state *session.State, r *rand.Rand, stream randstream
 			reply.Checksum = "123456789"
 		}
 
+		state.LastActive = time.Now()
+
 		if err := stream.Send(reply); err != nil {
+			if err := s.sessionStore.Update(state); err != nil {
+				return errors.Wrap(err, "could not update session")
+			}
+
 			return errors.Wrap(err, "sending number to stream")
 		}
 
