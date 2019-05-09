@@ -3,7 +3,6 @@ package session
 import (
 	"bytes"
 	"encoding/gob"
-	"fmt"
 	"io/ioutil"
 	"os"
 	"sync"
@@ -15,6 +14,7 @@ type Store interface {
 	Add(state *State) error
 	Update(state *State) error
 	Get(clientId string) (*State, error)
+	Delete(clientId string) error
 }
 
 type State struct {
@@ -33,8 +33,6 @@ func NewAStore() *AStore {
 	if err := store.loadFromFile(); err != nil {
 		panic(err)
 	}
-
-	fmt.Println(store.clientState)
 
 	return store
 }
@@ -73,6 +71,16 @@ func (s *AStore) Get(clientId string) (*State, error) {
 		return nil, errors.Errorf("state not found for client %q", clientId)
 	}
 	return &state, nil
+}
+
+func (s *AStore) Delete(clientId string) error {
+	s.mutex.Lock()
+	delete(s.clientState, clientId)
+	if err := s.saveToFile(); err != nil {
+		return err
+	}
+	s.mutex.Unlock()
+	return nil
 }
 
 const dataFileName = "data"

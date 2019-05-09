@@ -37,6 +37,10 @@ func (s *service) generate(state *session.State, r *rand.Rand, stream randstream
 		}
 	}
 
+	if err := s.sessionStore.Delete(state.ClientId); err != nil {
+		return errors.Wrap(err, "could not delete session state")
+	}
+
 	return nil
 }
 
