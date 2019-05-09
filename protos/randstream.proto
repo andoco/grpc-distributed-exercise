@@ -7,7 +7,7 @@ service Generator {
 }
 
 message Number {
-  int32 value = 1;
+  uint32 value = 1;
   string checksum = 2;
 }
 

@@ -2,7 +2,9 @@ package stateful
 
 import (
 	"fmt"
+	"math/rand"
 	"net"
+	"time"
 
 	"github.com/andoco/ably-distributed-exercise/server/stateful/randstream"
 	"github.com/pkg/errors"
@@ -12,7 +14,20 @@ import (
 type service struct{}
 
 func (s *service) Begin(req *randstream.BeginRequest, stream randstream.Generator_BeginServer) error {
-	stream.Send(&randstream.Number{Value: 1})
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+
+	for i := int32(0); i < req.MaxNumbers; i++ {
+		time.Sleep(1 * time.Second)
+		a := r.Uint32()
+		if err := stream.Send(&randstream.Number{Value: a}); err != nil {
+			return errors.Wrap(err, "sending number to stream")
+		}
+	}
+
+	if err := stream.Send(&randstream.Number{Checksum: "abcd1234"}); err != nil {
+		return errors.Wrap(err, "sending number to stream")
+	}
+
 	return nil
 }
 
