@@ -4,6 +4,7 @@ import (
 	"flag"
 	"log"
 
+	"github.com/andoco/ably-distributed-exercise/server/stateful"
 	"github.com/andoco/ably-distributed-exercise/server/stateless"
 )
 
@@ -19,7 +20,9 @@ func main() {
 			log.Fatal(err)
 		}
 	case "stateful":
-		log.Println("would run stateful")
+		if err := stateful.Serve(*port); err != nil {
+			log.Fatal(err)
+		}
 	default:
 		log.Println("USAGE: [OPTS] <stateless|stateful>")
 	}
