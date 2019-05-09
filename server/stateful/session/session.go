@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/gob"
 	"io/ioutil"
+	"log"
 	"os"
 	"sync"
 	"time"
@@ -35,6 +36,8 @@ func NewAStore() *AStore {
 	if err := store.loadFromFile(); err != nil {
 		panic(err)
 	}
+
+	store.startCleanupRoutine()
 
 	return store
 }
@@ -121,4 +124,35 @@ func (s *AStore) loadFromFile() error {
 	}
 
 	return nil
+}
+
+func (s *AStore) startCleanupRoutine() {
+	go func() {
+		for {
+			time.Sleep(1 * time.Second)
+
+			s.mutex.Lock()
+
+			expired := []string{}
+			for id, state := range s.clientState {
+				age := time.Since(state.LastActive)
+				if age >= 30*time.Second {
+					log.Printf("Found expired client state for %q\n", id)
+					expired = append(expired, id)
+				}
+			}
+
+			for _, id := range expired {
+				log.Printf("Deleting expired client state for %q\n", id)
+				delete(s.clientState, id)
+			}
+
+			if err := s.saveToFile(); err != nil {
+				// Should ideally return this somehow instead of exiting
+				log.Fatal(err)
+			}
+
+			s.mutex.Unlock()
+		}
+	}()
 }
