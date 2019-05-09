@@ -51,6 +51,19 @@ func (s *service) Begin(req *randstream.BeginRequest, stream randstream.Generato
 	return nil
 }
 
+func (s *service) Resume(req *randstream.ResumeRequest, stream randstream.Generator_ResumeServer) error {
+	state, err := s.sessionStore.Get(req.ClientId)
+	if err != nil {
+		return errors.Wrap(err, "could not resume")
+	}
+
+	if err := s.generate(state, stream); err != nil {
+		return errors.Wrap(err, "failed while generating value stream")
+	}
+
+	return nil
+}
+
 func Serve(port int) error {
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", port))
 	if err != nil {

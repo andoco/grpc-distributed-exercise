@@ -4,6 +4,7 @@ package randstream;
 
 service Generator {
   rpc Begin(BeginRequest) returns (stream Number) {}
+  rpc Resume(ResumeRequest) returns (stream Number) {}
 }
 
 message Number {
@@ -15,3 +16,5 @@ message BeginRequest {
   string clientId = 1;
   int32 maxNumbers = 2;
 }
+
+message ResumeRequest { string clientId = 1; }

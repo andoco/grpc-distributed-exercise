@@ -1,4 +1,5 @@
 const uuidv4 = require('uuid/v4')
+var backoff = require('backoff');
 
 var stub
 
@@ -21,10 +22,32 @@ function setupGrpc(args) {
   stub = new randstream.Generator(`localhost:${args['port']}`, grpc.credentials.createInsecure())
 }
 
+var connectBackoff
+
+function setupConnectBackoff() {
+  connectBackoff = backoff.exponential({ randomisationFactor: 0.1 })
+  connectBackoff.failAfter(10)
+
+  connectBackoff.on('backoff', (number, delay) => {
+    console.log('backoff:start', 'number:', number, 'delay:', delay)
+  })
+  connectBackoff.on('ready', (number, delay) => {
+    console.log('backoff:ready', 'number:', number, 'delay:', delay)
+    connect()
+  })
+  connectBackoff.on('fail', () => {
+    console.log('backoff:fail')
+  })
+}
+
 function connect() {
   var call = stub.Begin({ clientId: clientId, maxNumbers: maxNumbers })
+  var call = totalReceived == 0
+    ? stub.Begin({ clientId: clientId, maxNumbers: maxNumbers })
+    : stub.Resume({ clientId: clientId })
 
   call.on('data', number => {
+    connectBackoff.reset()
     handleNumber(number)
   })
   call.on('end', () => {
@@ -33,6 +56,7 @@ function connect() {
   call.on('error', err => {
     console.error('error', err)
     call.destroy()
+    connectBackoff.backoff(err)
   })
   call.on('status', status => {
     console.log('status', status)
@@ -45,6 +69,7 @@ function handleNumber(number) {
 
   if (number.checksum) {
     console.log('received checksum:', number.checksum)
+    process.exit()
   }
 }
 
@@ -56,6 +81,7 @@ function run(args) {
   clientId = uuidv4()
   maxNumbers = args.maxReceive
   setupGrpc(args)
+  setupConnectBackoff()
   connect()
 }
 

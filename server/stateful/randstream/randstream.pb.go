@@ -116,15 +116,55 @@ func (m *BeginRequest) GetMaxNumbers() int32 {
 	return 0
 }
 
+type ResumeRequest struct {
+	ClientId             string   `protobuf:"bytes,1,opt,name=clientId,proto3" json:"clientId,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *ResumeRequest) Reset()         { *m = ResumeRequest{} }
+func (m *ResumeRequest) String() string { return proto.CompactTextString(m) }
+func (*ResumeRequest) ProtoMessage()    {}
+func (*ResumeRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e70a04e184f3d1fe, []int{2}
+}
+
+func (m *ResumeRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ResumeRequest.Unmarshal(m, b)
+}
+func (m *ResumeRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ResumeRequest.Marshal(b, m, deterministic)
+}
+func (m *ResumeRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ResumeRequest.Merge(m, src)
+}
+func (m *ResumeRequest) XXX_Size() int {
+	return xxx_messageInfo_ResumeRequest.Size(m)
+}
+func (m *ResumeRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_ResumeRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ResumeRequest proto.InternalMessageInfo
+
+func (m *ResumeRequest) GetClientId() string {
+	if m != nil {
+		return m.ClientId
+	}
+	return ""
+}
+
 func init() {
 	proto.RegisterType((*Number)(nil), "randstream.Number")
 	proto.RegisterType((*BeginRequest)(nil), "randstream.BeginRequest")
+	proto.RegisterType((*ResumeRequest)(nil), "randstream.ResumeRequest")
 }
 
 func init() { proto.RegisterFile("randstream.proto", fileDescriptor_e70a04e184f3d1fe) }
 
 var fileDescriptor_e70a04e184f3d1fe = []byte{
-	// 184 bytes of a gzipped FileDescriptorProto
+	// 212 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x12, 0x28, 0x4a, 0xcc, 0x4b,
 	0x29, 0x2e, 0x29, 0x4a, 0x4d, 0xcc, 0xd5, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0xe2, 0x42, 0x88,
 	0x28, 0x59, 0x71, 0xb1, 0xf9, 0x95, 0xe6, 0x26, 0xa5, 0x16, 0x09, 0x89, 0x70, 0xb1, 0x96, 0x25,
@@ -133,10 +173,12 @@ var fileDescriptor_e70a04e184f3d1fe = []byte{
 	0xbe, 0x92, 0x17, 0x17, 0x8f, 0x53, 0x6a, 0x7a, 0x66, 0x5e, 0x50, 0x6a, 0x61, 0x69, 0x6a, 0x71,
 	0x09, 0x58, 0x6d, 0x4e, 0x66, 0x6a, 0x5e, 0x89, 0x67, 0x0a, 0xd8, 0x10, 0x90, 0x5a, 0x28, 0x5f,
 	0x48, 0x8e, 0x8b, 0x2b, 0x37, 0xb1, 0x02, 0x62, 0x55, 0x31, 0xd8, 0x24, 0xd6, 0x20, 0x24, 0x11,
-	0x23, 0x37, 0x2e, 0x4e, 0xf7, 0xd4, 0xbc, 0xd4, 0xa2, 0xc4, 0x92, 0xfc, 0x22, 0x21, 0x4b, 0x2e,
-	0x56, 0xb0, 0xc1, 0x42, 0x12, 0x7a, 0x48, 0x8e, 0x47, 0xb6, 0x4b, 0x4a, 0x08, 0x59, 0x06, 0x62,
-	0x88, 0x12, 0x83, 0x01, 0x63, 0x12, 0x1b, 0xd8, 0x8b, 0xc6, 0x80, 0x00, 0x00, 0x00, 0xff, 0xff,
-	0xa2, 0xfe, 0x38, 0xeb, 0xf6, 0x00, 0x00, 0x00,
+	0x25, 0x6d, 0x2e, 0xde, 0xa0, 0xd4, 0xe2, 0xd2, 0xdc, 0x54, 0x22, 0x0c, 0x33, 0x6a, 0x66, 0xe4,
+	0xe2, 0x74, 0x4f, 0xcd, 0x4b, 0x2d, 0x4a, 0x2c, 0xc9, 0x2f, 0x12, 0xb2, 0xe4, 0x62, 0x05, 0x3b,
+	0x43, 0x48, 0x42, 0x0f, 0xc9, 0xab, 0xc8, 0x2e, 0x93, 0x12, 0x42, 0x96, 0x81, 0x58, 0xa9, 0xc4,
+	0x60, 0xc0, 0x28, 0x64, 0xcd, 0xc5, 0x06, 0xb1, 0x55, 0x48, 0x12, 0x59, 0x05, 0x8a, 0x4b, 0x70,
+	0x69, 0x4e, 0x62, 0x03, 0x87, 0xa6, 0x31, 0x20, 0x00, 0x00, 0xff, 0xff, 0xd9, 0xe6, 0x52, 0xf1,
+	0x61, 0x01, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -152,6 +194,7 @@ const _ = grpc.SupportPackageIsVersion4
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type GeneratorClient interface {
 	Begin(ctx context.Context, in *BeginRequest, opts ...grpc.CallOption) (Generator_BeginClient, error)
+	Resume(ctx context.Context, in *ResumeRequest, opts ...grpc.CallOption) (Generator_ResumeClient, error)
 }
 
 type generatorClient struct {
@@ -194,9 +237,42 @@ func (x *generatorBeginClient) Recv() (*Number, error) {
 	return m, nil
 }
 
+func (c *generatorClient) Resume(ctx context.Context, in *ResumeRequest, opts ...grpc.CallOption) (Generator_ResumeClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_Generator_serviceDesc.Streams[1], "/randstream.Generator/Resume", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &generatorResumeClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type Generator_ResumeClient interface {
+	Recv() (*Number, error)
+	grpc.ClientStream
+}
+
+type generatorResumeClient struct {
+	grpc.ClientStream
+}
+
+func (x *generatorResumeClient) Recv() (*Number, error) {
+	m := new(Number)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // GeneratorServer is the server API for Generator service.
 type GeneratorServer interface {
 	Begin(*BeginRequest, Generator_BeginServer) error
+	Resume(*ResumeRequest, Generator_ResumeServer) error
 }
 
 func RegisterGeneratorServer(s *grpc.Server, srv GeneratorServer) {
@@ -224,6 +300,27 @@ func (x *generatorBeginServer) Send(m *Number) error {
 	return x.ServerStream.SendMsg(m)
 }
 
+func _Generator_Resume_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(ResumeRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(GeneratorServer).Resume(m, &generatorResumeServer{stream})
+}
+
+type Generator_ResumeServer interface {
+	Send(*Number) error
+	grpc.ServerStream
+}
+
+type generatorResumeServer struct {
+	grpc.ServerStream
+}
+
+func (x *generatorResumeServer) Send(m *Number) error {
+	return x.ServerStream.SendMsg(m)
+}
+
 var _Generator_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "randstream.Generator",
 	HandlerType: (*GeneratorServer)(nil),
@@ -232,6 +329,11 @@ var _Generator_serviceDesc = grpc.ServiceDesc{
 		{
 			StreamName:    "Begin",
 			Handler:       _Generator_Begin_Handler,
+			ServerStreams: true,
+		},
+		{
+			StreamName:    "Resume",
+			Handler:       _Generator_Resume_Handler,
 			ServerStreams: true,
 		},
 	},
