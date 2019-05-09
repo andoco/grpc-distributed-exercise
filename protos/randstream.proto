@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package randstream;
+
+service Generator {
+  rpc Begin(BeginRequest) returns (stream Number) {}
+}
+
+message Number {
+  int32 value = 1;
+  string checksum = 2;
+}
+
+message BeginRequest {
+  string clientId = 1;
+  int32 maxNumbers = 2;
+}
