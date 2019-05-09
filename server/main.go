@@ -11,7 +11,16 @@ func main() {
 	port := flag.Int("port", 8888, "")
 	flag.Parse()
 
-	if err := stateless.Serve(*port); err != nil {
-		log.Fatal(err)
+	cmd := flag.Arg(0)
+
+	switch cmd {
+	case "stateless":
+		if err := stateless.Serve(*port); err != nil {
+			log.Fatal(err)
+		}
+	case "stateful":
+		log.Println("would run stateful")
+	default:
+		log.Println("USAGE: [OPTS] <stateless|stateful>")
 	}
 }
