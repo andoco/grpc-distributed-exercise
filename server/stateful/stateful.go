@@ -66,6 +66,7 @@ func (s *service) Begin(req *randstream.BeginRequest, stream randstream.Generato
 		ClientId:   req.ClientId,
 		MaxNumbers: int(req.MaxNumbers),
 		Seed:       time.Now().UnixNano(),
+		LastActive: time.Now(),
 	}
 	s.sessionStore.Add(state)
 
