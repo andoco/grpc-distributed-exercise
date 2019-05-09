@@ -95,7 +95,15 @@ func Serve(port int) error {
 		return errors.Wrap(err, "failed to listen")
 	}
 
-	grpcServer := grpc.NewServer()
+	errHandler := func(srv interface{}, ss grpc.ServerStream, info *grpc.StreamServerInfo, handler grpc.StreamHandler) error {
+		err := handler(srv, ss)
+		if err != nil {
+			log.Printf("method %q failed: %s", info.FullMethod, err)
+		}
+		return err
+	}
+
+	grpcServer := grpc.NewServer(grpc.StreamInterceptor(errHandler))
 	service := &service{sessionStore: session.NewAStore()}
 	randstream.RegisterGeneratorServer(grpcServer, service)
 
