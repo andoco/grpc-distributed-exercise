@@ -1,3 +1,5 @@
+const uuidv4 = require('uuid/v4')
+
 var stub
 
 function setupGrpc(args) {
@@ -20,7 +22,7 @@ function setupGrpc(args) {
 }
 
 function connect() {
-  var call = stub.Begin({ clientId: "test", maxNumbers: 10 })
+  var call = stub.Begin({ clientId: clientId, maxNumbers: maxNumbers })
 
   call.on('data', number => {
     handleNumber(number)
@@ -46,9 +48,13 @@ function handleNumber(number) {
   }
 }
 
+var clientId
+var maxNumbers
 var totalReceived = 0
 
 function run(args) {
+  clientId = uuidv4()
+  maxNumbers = args.maxReceive
   setupGrpc(args)
   connect()
 }
